@@ -20,45 +20,75 @@ import javafx.util.Duration;
 
 public class PlayField extends Application {
 
-    private InputStream antResource = getClass().getResourceAsStream("res/ant.png");
-
-    private List<Ant> antList = new ArrayList<>();
-    private Consumer<Ant> antConsumer;
+    //---------------------------------------------------------------------------------------------
+    // MAIN METHOD.
+    //---------------------------------------------------------------------------------------------
 
     public static void main(String[] args) {
         Application.launch(PlayField.class, args);
     }
 
+    //---------------------------------------------------------------------------------------------
+    // PRIVATE FIELDS.
+    //---------------------------------------------------------------------------------------------
+
+    private InputStream antResource = getClass().getResourceAsStream("res/ant.png");
+
+    private List<Ant> antList = new ArrayList<>();
+    private Consumer<Ant> antConsumer;
+
+    //---------------------------------------------------------------------------------------------
+    // METHODS.
+    //---------------------------------------------------------------------------------------------
+
     public void start(Stage primaryStage) {
         Pane root = new AnchorPane();
 
-        Ant ant0 = new Ant();
+        initAnts();
+        initAntBehaviour();
+        initPlayfield(root);
+
+        Timeline timeline = initTimeline();
+        timeline.play();
+
+        Scene scene = new Scene(root, 500, 500);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+
+    //---------------------------------------------------------------------------------------------
+    // PRIVATE METHODS.
+    //---------------------------------------------------------------------------------------------
+
+    private void initAnts() {
+        Ant ant0 = new Ant(0);
         ant0.xProperty.set(150);
         ant0.yProperty.set(150);
         antList.add(ant0);
-        Ant ant1 = new Ant();
+        Ant ant1 = new Ant(1);
         ant1.xProperty.set(150);
         ant1.yProperty.set(150);
         antList.add(ant1);
-        Ant ant2 = new Ant();
+        Ant ant2 = new Ant(2);
         ant2.xProperty.set(150);
         ant2.yProperty.set(150);
         antList.add(ant2);
+    }
 
-        initRootPane(root);
-
+    private void initAntBehaviour() {
         Random rng = new Random();
         BooleanProperty backwards = new SimpleBooleanProperty(false);
         defineAntConsumer((Ant ant) -> {
-            if (ant == ant0) {
+            if (ant.id == 0) {
                 ant.setAngle(ant.getAngle() + 10);
                 ant.move(10);
             }
-            if (ant == ant1) {
+            if (ant.id == 1) {
                 ant.setAngle(rng.nextDouble() * 360);
                 ant.move(25);
             }
-            if (ant == ant2) {
+            if (ant.id == 2) {
                 double value = backwards.get() ? 180 : 0;
                 ant.setAngle(90 + value);
                 ant.move(25);
@@ -70,17 +100,15 @@ public class PlayField extends Application {
                 }
             }
         });
+    }
 
+    private Timeline initTimeline() {
         KeyFrame keyFrame = new KeyFrame(Duration.millis(10), (event) -> {
             callAntConsumer();
         });
         Timeline timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-
-        Scene scene = new Scene(root, 500, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return timeline;
     }
 
     private void callAntConsumer() {
@@ -98,7 +126,7 @@ public class PlayField extends Application {
         this.antConsumer = antConsumer;
     }
 
-    private void initRootPane(Pane rootPane) {
+    private void initPlayfield(Pane rootPane) {
         Image antImage = new Image(antResource, 40, 40, true, false);
         for (Ant ant : antList) {
             ImageView imageView = new ImageView(antImage);

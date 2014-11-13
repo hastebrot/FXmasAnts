@@ -6,10 +6,31 @@ import javafx.geometry.Point2D;
 
 public class Ant {
 
+    //---------------------------------------------------------------------------------------------
+    // FIELDS.
+    //---------------------------------------------------------------------------------------------
+
+    public final int id;
+
     public final DoubleProperty angleProperty = new SimpleDoubleProperty();
     public final DoubleProperty xProperty = new SimpleDoubleProperty();
     public final DoubleProperty yProperty = new SimpleDoubleProperty();
     public final DoubleProperty distanceProperty = new SimpleDoubleProperty();
+
+    //---------------------------------------------------------------------------------------------
+    // CONSTRUCTORS.
+    //---------------------------------------------------------------------------------------------
+
+    public Ant(int id) {
+        this.id = id;
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // METHODS.
+    //---------------------------------------------------------------------------------------------
+
+    public double getX() { return xProperty.get(); }
+    public double getY() { return yProperty.get(); }
 
     public void move(double distance) {
         distanceProperty.set(distance);
@@ -33,8 +54,5 @@ public class Ant {
     public double getAngle() {
         return angleProperty.get();
     }
-
-    public double getX() { return xProperty.get(); }
-    public double getY() { return yProperty.get(); }
 
 }
