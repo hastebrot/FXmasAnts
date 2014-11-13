@@ -1,3 +1,8 @@
+## Requirements
+
+- Java Development Kit 8.0 or newer.
+- IntelliJ IDEA 12.1 or newer.
+
 ## Example
 
 ~~~java
