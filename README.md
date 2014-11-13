@@ -1,3 +1,5 @@
+## Example
+
 ~~~java
 private void initAntBehaviour() {
     Random rng = new Random();
@@ -28,3 +30,15 @@ private void initAntBehaviour() {
     });
 }
 ~~~
+
+## TODO
+
+- Simplify random movement and off-field movement detection.
+- Add `HashMap` for `Ant` data.
+- Add interface for `Sprite`s.
+- Implement enemy `Bug`s and energy bar.
+- Implement target `Apple`s, transportation weight and target zone.
+- Add behaviour presets and ant role assignment.
+- Add simple tutorial with samples.
+- Add instructions for setup with IntelliJ, Eclipse and Netbeans.
+- Add API documentation and Javadocs.
