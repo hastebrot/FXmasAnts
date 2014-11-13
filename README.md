@@ -52,3 +52,4 @@ private void initAntBehaviour() {
 - Add `AntNest` and spawn `Ant`s within this nest.
 - Add visual range.
 - Different paradigms: total control and events (`onAppleDetected(apple)`, `onBugDetected(bug)`).
+- Simplify movement (`moveTo(apple)`, `moveAwayFrom(bug)`).
