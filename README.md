@@ -50,3 +50,5 @@ private void initAntBehaviour() {
 - `Playfield` with DSL that uses `AntFactory` and `AntBehaviourFactory`.
 - Provide `Playfield` with timer and sprites counter.
 - Add `AntNest` and spawn `Ant`s within this nest.
+- Add visual range.
+- Different paradigms: total control and events (`onAppleDetected(apple)`, `onBugDetected(bug)`).
