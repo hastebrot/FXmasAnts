@@ -46,3 +46,5 @@ private void initAntBehaviour() {
 - Add simple tutorial with samples.
 - Add instructions for setup with IntelliJ, Eclipse and Netbeans.
 - Add API documentation and Javadocs.
+- Center point and bounding box for `Sprite`s.
+- `Playfield` with DSL that uses `AntFactory` and `AntBehaviourFactory`.
