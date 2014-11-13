@@ -7,30 +7,18 @@ import java.util.Random;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class PlayField extends Application {
-
-    //---------------------------------------------------------------------------------------------
-    // MAIN METHOD.
-    //---------------------------------------------------------------------------------------------
-
-    public static void main(String[] args) {
-        Application.launch(PlayField.class, args);
-    }
+public class PlayField {
 
     //---------------------------------------------------------------------------------------------
     // PRIVATE FIELDS.
     //---------------------------------------------------------------------------------------------
 
-    private InputStream antResource = getClass().getResourceAsStream("res/ant.png");
+    private InputStream antResource = getClass().getResourceAsStream("res/ant2.png");
 
     private List<Ant> antList = new ArrayList<>();
     private Consumer<Ant> antConsumer;
@@ -39,21 +27,14 @@ public class PlayField extends Application {
     // METHODS.
     //---------------------------------------------------------------------------------------------
 
-    public void start(Stage primaryStage) {
-        Pane root = new AnchorPane();
-
+    public void attachTo(Pane rootPane) {
         initAnts();
         initAntBehaviour();
-        initPlayfield(root);
+        initPlayfield(rootPane);
 
         Timeline timeline = initTimeline();
         timeline.play();
-
-        Scene scene = new Scene(root, 500, 500);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
-
 
     //---------------------------------------------------------------------------------------------
     // PRIVATE METHODS.
@@ -127,7 +108,7 @@ public class PlayField extends Application {
     }
 
     private void initPlayfield(Pane rootPane) {
-        Image antImage = new Image(antResource, 40, 40, true, false);
+        Image antImage = new Image(antResource, 25, 25, true, false);
         for (Ant ant : antList) {
             ImageView imageView = new ImageView(antImage);
             imageView.rotateProperty().bind(ant.angleProperty);
