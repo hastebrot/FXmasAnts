@@ -83,7 +83,7 @@ public class PlayField extends Application {
             }
             if (ant.id == 1) {
                 ant.setAngle(rng.nextDouble() * 360);
-                ant.move(25);
+                ant.move(50);
             }
             if (ant.id == 2) {
                 if (ant.data("backwards") == null) {
@@ -92,10 +92,10 @@ public class PlayField extends Application {
                 double value = ant.data("backwards") ? 180 : 0;
                 ant.setAngle(90 + value);
                 ant.move(25);
-                if (ant.getX() > 500) {
+                if (ant.getX() >= 500) {
                     ant.data("backwards", true);
                 }
-                if (ant.getX() < 0) {
+                if (ant.getX() <= 0) {
                     ant.data("backwards", false);
                 }
             }
@@ -103,7 +103,7 @@ public class PlayField extends Application {
     }
 
     private Timeline initTimeline() {
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(10), (event) -> {
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(5), (event) -> {
             callAntConsumer();
         });
         Timeline timeline = new Timeline(keyFrame);

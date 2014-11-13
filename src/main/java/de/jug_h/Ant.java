@@ -57,8 +57,12 @@ public class Ant {
         Point2D vector = new Point2D(Math.cos(theta), Math.sin(theta));
 
         Point2D newPosition = position.add(vector);
-        xProperty.set(newPosition.getX());
-        yProperty.set(newPosition.getY());
+        xProperty.set(clamp(newPosition.getX(), 0, 500));
+        yProperty.set(clamp(newPosition.getY(), 0, 500));
+    }
+
+    private double clamp(double value, double min, double max) {
+        return Math.min(Math.max(value, min), max);
     }
 
     public void setAngle(double angle) {
