@@ -7,9 +7,12 @@ import java.util.Random;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 public class PlayField {
@@ -17,6 +20,9 @@ public class PlayField {
     //---------------------------------------------------------------------------------------------
     // PRIVATE FIELDS.
     //---------------------------------------------------------------------------------------------
+
+    private StackPane rootPane;
+    private AnchorPane playfieldPane;
 
     private InputStream antResource = getClass().getResourceAsStream("res/ant2.png");
 
@@ -27,11 +33,16 @@ public class PlayField {
     // METHODS.
     //---------------------------------------------------------------------------------------------
 
-    public void attachTo(Pane rootPane) {
+    public Pane buildPane() {
+        initRootPane();
+        initPlayfieldPane();
+
         initAnts();
         initAntBehaviour();
-        initPlayfield(rootPane);
+        return rootPane;
+    }
 
+    public void run() {
         Timeline timeline = initTimeline();
         timeline.play();
     }
@@ -40,19 +51,37 @@ public class PlayField {
     // PRIVATE METHODS.
     //---------------------------------------------------------------------------------------------
 
+    // https://color.adobe.com/Theme-1-color-theme-4814237/
+
+    private void initRootPane() {
+        rootPane = new StackPane();
+        rootPane.setStyle("-fx-background-color: #BFD2BF;");
+        rootPane.setPadding(new Insets(20));
+    }
+
+    private void initPlayfieldPane() {
+        playfieldPane = new AnchorPane();
+        playfieldPane.setStyle("-fx-background-color: #EDDBBC;");
+
+        rootPane.getChildren().add(playfieldPane);
+    }
+
     private void initAnts() {
-        Ant ant0 = new Ant(0);
-        ant0.xProperty.set(150);
-        ant0.yProperty.set(150);
-        antList.add(ant0);
-        Ant ant1 = new Ant(1);
-        ant1.xProperty.set(150);
-        ant1.yProperty.set(150);
-        antList.add(ant1);
-        Ant ant2 = new Ant(2);
-        ant2.xProperty.set(150);
-        ant2.yProperty.set(150);
-        antList.add(ant2);
+        for (int index = 0; index <= 4; index++) {
+            Ant ant = new Ant(index);
+            ant.xProperty.set(150);
+            ant.yProperty.set(150);
+            antList.add(ant);
+        }
+
+        Image antImage = new Image(antResource, 25, 25, true, false);
+        for (Ant ant : antList) {
+            ImageView imageView = new ImageView(antImage);
+            imageView.rotateProperty().bind(ant.angleProperty);
+            imageView.xProperty().bind(ant.xProperty);
+            imageView.yProperty().bind(ant.yProperty);
+            playfieldPane.getChildren().add(imageView);
+        }
     }
 
     private void initAntBehaviour() {
@@ -62,7 +91,7 @@ public class PlayField {
                 ant.setAngle(ant.getAngle() + 10);
                 ant.move(10);
             }
-            if (ant.id == 1) {
+            if (ant.id == 1 || ant.id >= 3) {
                 ant.setAngle(rng.nextDouble() * 360);
                 ant.move(50);
             }
@@ -72,8 +101,8 @@ public class PlayField {
                 }
                 double value = ant.data("backwards") ? 180 : 0;
                 ant.setAngle(90 + value);
-                ant.move(25);
-                if (ant.getX() >= 500) {
+                ant.move(10);
+                if (ant.getX() >= (500 - 25 - 40)) {
                     ant.data("backwards", true);
                 }
                 if (ant.getX() <= 0) {
@@ -105,17 +134,6 @@ public class PlayField {
 
     private void defineAntConsumer(Consumer<Ant> antConsumer) {
         this.antConsumer = antConsumer;
-    }
-
-    private void initPlayfield(Pane rootPane) {
-        Image antImage = new Image(antResource, 25, 25, true, false);
-        for (Ant ant : antList) {
-            ImageView imageView = new ImageView(antImage);
-            imageView.rotateProperty().bind(ant.angleProperty);
-            imageView.xProperty().bind(ant.xProperty);
-            imageView.yProperty().bind(ant.yProperty);
-            rootPane.getChildren().add(imageView);
-        }
     }
 
 }

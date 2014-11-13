@@ -2,7 +2,6 @@ package de.jug_h;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -21,12 +20,11 @@ public class FXmasAnts extends Application {
     //---------------------------------------------------------------------------------------------
 
     public void start(Stage primaryStage) {
-        PlayField playField = new PlayField();
+        PlayField playfield = new PlayField();
+        Pane playfieldPane = playfield.buildPane();
+        playfield.run();
 
-        Pane rootPane = new AnchorPane();
-        playField.attachTo(rootPane);
-
-        Scene scene = new Scene(rootPane, 500, 500);
+        Scene scene = new Scene(playfieldPane, 500, 500);
         primaryStage.setScene(scene);
         primaryStage.setTitle(getClass().getSimpleName());
         primaryStage.show();
