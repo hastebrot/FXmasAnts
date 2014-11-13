@@ -48,3 +48,5 @@ private void initAntBehaviour() {
 - Add API documentation and Javadocs.
 - Center point and bounding box for `Sprite`s.
 - `Playfield` with DSL that uses `AntFactory` and `AntBehaviourFactory`.
+- Provide `Playfield` with timer and sprites counter.
+- Add `AntNest` and spawn `Ant`s within this nest.
