@@ -3,12 +3,11 @@ package de.jug_h;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -35,15 +34,23 @@ public class PlayField extends Application {
         ant0.xProperty.set(150);
         ant0.yProperty.set(150);
         antList.add(ant0);
+        Ant ant1 = new Ant();
+        ant1.xProperty.set(150);
+        ant1.yProperty.set(150);
+        antList.add(ant1);
 
         initRootPane(root);
 
-        final DoubleProperty angle = new SimpleDoubleProperty(90 + 45);
-
+        Random rng = new Random();
         defineAntConsumer((Ant ant) -> {
-            ant.setAngle(angle.get());
-            ant.move(10);
-            angle.set(angle.get() + 10);
+            if (ant == ant0) {
+                ant.setAngle(ant.getAngle() + 10);
+                ant.move(10);
+            }
+            if (ant == ant1) {
+                ant.setAngle(rng.nextDouble() * 360);
+                ant.move(25);
+            }
         });
 
         KeyFrame keyFrame = new KeyFrame(Duration.millis(10), (event) -> {
@@ -61,7 +68,6 @@ public class PlayField extends Application {
     private void callAntConsumer() {
         for (Ant ant : antList) {
             if (ant.distanceProperty.get() == 0) {
-                System.out.println("ant.accept");
                 this.antConsumer.accept(ant);
             }
             if (ant.distanceProperty.get() > 0) {
