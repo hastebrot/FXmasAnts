@@ -1,5 +1,7 @@
 package de.jug_h;
 
+import java.util.HashMap;
+import java.util.Map;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -11,6 +13,8 @@ public class Ant {
     //---------------------------------------------------------------------------------------------
 
     public final int id;
+
+    private final Map<String, Object> data = new HashMap<>();
 
     public final DoubleProperty angleProperty = new SimpleDoubleProperty();
     public final DoubleProperty xProperty = new SimpleDoubleProperty();
@@ -31,6 +35,15 @@ public class Ant {
 
     public double getX() { return xProperty.get(); }
     public double getY() { return yProperty.get(); }
+
+    @SuppressWarnings("unchecked")
+    public <T> T data(String key) {
+        return (T) data.get(key);
+    }
+
+    public <T> void data(String key, T value) {
+        data.put(key, value);
+    }
 
     public void move(double distance) {
         distanceProperty.set(distance);

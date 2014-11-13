@@ -8,8 +8,6 @@ import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -78,7 +76,6 @@ public class PlayField extends Application {
 
     private void initAntBehaviour() {
         Random rng = new Random();
-        BooleanProperty backwards = new SimpleBooleanProperty(false);
         defineAntConsumer((Ant ant) -> {
             if (ant.id == 0) {
                 ant.setAngle(ant.getAngle() + 10);
@@ -89,14 +86,17 @@ public class PlayField extends Application {
                 ant.move(25);
             }
             if (ant.id == 2) {
-                double value = backwards.get() ? 180 : 0;
+                if (ant.data("backwards") == null) {
+                    ant.data("backwards", false);
+                }
+                double value = ant.data("backwards") ? 180 : 0;
                 ant.setAngle(90 + value);
                 ant.move(25);
                 if (ant.getX() > 500) {
-                    backwards.set(true);
+                    ant.data("backwards", true);
                 }
                 if (ant.getX() < 0) {
-                    backwards.set(false);
+                    ant.data("backwards", false);
                 }
             }
         });
