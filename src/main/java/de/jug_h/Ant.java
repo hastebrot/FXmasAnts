@@ -14,7 +14,7 @@ public class Ant {
 
     public final int id;
 
-    private final Map<String, Object> data = new HashMap<>();
+    private final Map<String, Object> memory = new HashMap<>();
 
     public final DoubleProperty angleProperty = new SimpleDoubleProperty();
     public final DoubleProperty xProperty = new SimpleDoubleProperty();
@@ -37,12 +37,12 @@ public class Ant {
     public double getY() { return yProperty.get(); }
 
     @SuppressWarnings("unchecked")
-    public <T> T data(String key) {
-        return (T) data.get(key);
+    public <T> T memory(String key) {
+        return (T) memory.get(key);
     }
 
-    public <T> void data(String key, T value) {
-        data.put(key, value);
+    public <T> void memory(String key, T value) {
+        memory.put(key, value);
     }
 
     public void move(double distance) {
@@ -57,12 +57,8 @@ public class Ant {
         Point2D vector = new Point2D(Math.cos(theta), Math.sin(theta));
 
         Point2D newPosition = position.add(vector);
-        xProperty.set(clamp(newPosition.getX(), 0, 500 - 25 - 40));
-        yProperty.set(clamp(newPosition.getY(), 0, 500 - 25 - 40));
-    }
-
-    private double clamp(double value, double min, double max) {
-        return Math.min(Math.max(value, min), max);
+        xProperty.set(MathUtils.clamp(newPosition.getX(), 0, 500 - 25 - 40));
+        yProperty.set(MathUtils.clamp(newPosition.getY(), 0, 500 - 25 - 40));
     }
 
     public void setAngle(double angle) {

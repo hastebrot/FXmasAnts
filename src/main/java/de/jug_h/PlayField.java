@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-public class PlayField {
+public class Playfield {
 
     //---------------------------------------------------------------------------------------------
     // PRIVATE FIELDS.
@@ -36,10 +36,12 @@ public class PlayField {
     public Pane buildPane() {
         initRootPane();
         initPlayfieldPane();
+        return rootPane;
+    }
 
+    public void buildSprites() {
         initAnts();
         initAntBehaviour();
-        return rootPane;
     }
 
     public void run() {
@@ -96,17 +98,17 @@ public class PlayField {
                 ant.move(50);
             }
             if (ant.id == 2) {
-                if (ant.data("backwards") == null) {
-                    ant.data("backwards", false);
+                if (ant.memory("backwards") == null) {
+                    ant.memory("backwards", false);
                 }
-                double value = ant.data("backwards") ? 180 : 0;
+                double value = ant.memory("backwards") ? 180 : 0;
                 ant.setAngle(90 + value);
                 ant.move(10);
                 if (ant.getX() >= (500 - 25 - 40)) {
-                    ant.data("backwards", true);
+                    ant.memory("backwards", true);
                 }
                 if (ant.getX() <= 0) {
-                    ant.data("backwards", false);
+                    ant.memory("backwards", false);
                 }
             }
         });
