@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-public class Playfield {
+public class Playfieldd {
 
     //---------------------------------------------------------------------------------------------
     // PRIVATE FIELDS.
