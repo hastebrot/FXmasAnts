@@ -10,11 +10,11 @@ import static org.testfx.api.FxToolkit.setupStage;
 
 public class PlayfieldTest extends FxRobotTestBase {
 
-    public Playfieldd playfield;
+    public Playfield playfield;
 
     @Before
     public void setup() throws Exception {
-        playfield = new Playfieldd();
+        playfield = new Playfield();
         setupStage(stage -> {
             Pane playfieldPane = playfield.buildPane();
             playfield.run();
