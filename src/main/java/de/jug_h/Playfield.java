@@ -1,12 +1,13 @@
 package de.jug_h;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +16,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import de.jug_h.entity.Entity;
+import de.jug_h.entity.Resources;
+
 public class Playfield {
 
     //---------------------------------------------------------------------------------------------
@@ -22,9 +26,9 @@ public class Playfield {
     //---------------------------------------------------------------------------------------------
 
     private StackPane rootPane;
-    private AnchorPane playfieldPane;
+    public AnchorPane playfieldPane;
 
-    private InputStream antResource = getClass().getResourceAsStream("res/ant2.png");
+    private List<Entity> entities = new ArrayList<>();
 
     private List<Ant> antList = new ArrayList<>();
     private Consumer<Ant> antConsumer;
@@ -44,8 +48,14 @@ public class Playfield {
         initAntBehaviour();
     }
 
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
     public void run() {
-        Timeline timeline = initTimeline();
+        Timeline timeline = initTimeline(Duration.millis(5), (event) -> {
+            callAntConsumer();
+        });
         timeline.play();
     }
 
@@ -57,13 +67,14 @@ public class Playfield {
 
     private void initRootPane() {
         rootPane = new StackPane();
-        rootPane.setStyle("-fx-background-color: #BFD2BF;");
+        rootPane.setStyle("-fx-background-color: gray;");
         rootPane.setPadding(new Insets(20));
     }
 
     private void initPlayfieldPane() {
         playfieldPane = new AnchorPane();
-        playfieldPane.setStyle("-fx-background-color: #EDDBBC;");
+        playfieldPane.setId("playfield");
+        playfieldPane.setStyle("-fx-background-color: white;");
 
         rootPane.getChildren().add(playfieldPane);
     }
@@ -76,7 +87,7 @@ public class Playfield {
             antList.add(ant);
         }
 
-        Image antImage = new Image(antResource, 25, 25, true, false);
+        Image antImage = Resources.antImage();
         for (Ant ant : antList) {
             ImageView imageView = new ImageView(antImage);
             imageView.rotateProperty().bind(ant.angleProperty);
@@ -114,10 +125,9 @@ public class Playfield {
         });
     }
 
-    private Timeline initTimeline() {
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(5), (event) -> {
-            callAntConsumer();
-        });
+    private Timeline initTimeline(Duration duration,
+                                  EventHandler<ActionEvent> eventHandler) {
+        KeyFrame keyFrame = new KeyFrame(duration, eventHandler);
         Timeline timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         return timeline;
