@@ -3,8 +3,6 @@ package de.jug_h.entity;
 import java.util.List;
 import javafx.geometry.Point2D;
 
-import de.jug_h.util.MathUtils;
-
 public class Behavior {
 
     //---------------------------------------------------------------------------------------------
@@ -51,6 +49,10 @@ public class Behavior {
         moves = false;
     }
 
+    public boolean moves() {
+        return moves;
+    }
+
     public void transportCarry(Entity entity) {}
     public void transportDrop() {}
 
@@ -59,18 +61,5 @@ public class Behavior {
 
     public List<Entity> visionLook() { return null; }
     public void visionMark() {}
-
-    public void internalTick() {
-        if (moves) {
-            Point2D position = position();
-            double angle = angle();
-
-            Point2D direction = MathUtils.rotate(angle - 90);
-            Point2D newPosition = position.add(direction);
-
-            sprite.xProperty().set(MathUtils.clamp(newPosition.getX(), 0, 500 - 25 - 40));
-            sprite.yProperty().set(MathUtils.clamp(newPosition.getY(), 0, 500 - 25 - 40));
-        }
-    }
 
 }

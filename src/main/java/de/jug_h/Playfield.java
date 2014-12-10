@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -41,6 +42,10 @@ public class Playfield {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public Bounds bounds() {
+        return playfieldPane.getLayoutBounds();
     }
 
     public void define(Consumer<Entity> entityConsumer) {
@@ -86,7 +91,7 @@ public class Playfield {
         if (entityConsumer != null) {
             for (Entity entity : entities) {
                 entityConsumer.accept(entity);
-                entity.behavior().internalTick();
+                entity.tick();
             }
         }
     }
