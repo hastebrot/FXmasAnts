@@ -12,6 +12,8 @@ public class Entity {
 
     private Memory memory;
 
+    private Behavior behavior;
+
     //---------------------------------------------------------------------------------------------
     // CONSTRUCTORS.
     //---------------------------------------------------------------------------------------------
@@ -42,6 +44,14 @@ public class Entity {
 
     public void setMemory(Memory memory) {
         this.memory = memory;
+    }
+
+    public Behavior getBehavior() {
+        return behavior;
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
 }

@@ -27,7 +27,7 @@ public class Playfield {
     //---------------------------------------------------------------------------------------------
 
     private StackPane rootPane;
-    public AnchorPane playfieldPane;
+    private AnchorPane playfieldPane;
 
     private List<Entity> entities = new ArrayList<>();
 
