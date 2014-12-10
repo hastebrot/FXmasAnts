@@ -23,23 +23,20 @@ public class Memory {
 
     public void putDouble(String thing,
                           Function<Double, Double> callback) {
-        put(thing, callback.apply(getDouble(thing)));
+        memory.put(thing, callback.apply(getDouble(thing)));
     }
 
     public Object get(String thing) {
-        return memory.get(thing);
+        return memory.getOrDefault(thing, null);
     }
 
     public double getDouble(String thing) {
-        Object value = get(thing);
-        return value == null ? 0.0 : (double) value;
+        return (double) memory.getOrDefault(thing, 0.0);
     }
 
     public boolean getBoolean(String thing) {
-        Object value = get(thing);
-        return value == null ? false : (boolean) value;
+        return (boolean) memory.getOrDefault(thing, false);
     }
-
 
     public boolean has(String thing) {
         return memory.containsKey(thing);
@@ -52,6 +49,5 @@ public class Memory {
     public void clear() {
         memory.clear();
     }
-
 
 }

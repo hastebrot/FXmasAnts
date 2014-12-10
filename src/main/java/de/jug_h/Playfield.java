@@ -126,7 +126,7 @@ public class Playfield {
                 if (entity.memory().getDouble("distance") == 0.0) {
                     entity.memory().put("distance", 10.0);
                     entity.behavior().turnBy(10);
-                    entity.behavior().move();
+                    entity.behavior().moveWalk();
                 }
                 entity.memory().putDouble("distance", value -> value - 1);
             }
@@ -136,22 +136,24 @@ public class Playfield {
                 if (entity.memory().getDouble("distance") == 0.0) {
                     entity.memory().put("distance", 50.0);
                     entity.behavior().turnTo(random.nextDouble() * 360);
-                    entity.behavior().move();
+                    entity.behavior().moveWalk();
                 }
                 entity.memory().putDouble("distance", value -> value - 1);
             }
 
-            // move back and forth.
+            // move left and right.
             if (entity.id() == 2) {
+                if (entity.memory().getDouble("angle") == 0.0) {
+                    entity.memory().put("angle", 90.0);
+                }
                 if (entity.memory().getDouble("distance") == 0.0) {
-                    double value = entity.memory().getBoolean("backwards") ? 180 : 0;
-                    entity.behavior().turnTo(90 + value);
-                    entity.behavior().move();
+                    entity.behavior().turnTo(entity.memory().getDouble("angle"));
+                    entity.behavior().moveWalk();
                     if (entity.behavior().position().getX() >= (500 - 25 - 40)) {
-                        entity.memory().put("backwards", true);
+                        entity.memory().put("angle", -90.0);
                     }
-                    if (entity.behavior().position().getY() <= 0) {
-                        entity.memory().put("backwards", false);
+                    if (entity.behavior().position().getX() <= 0) {
+                        entity.memory().put("angle", 90.0);
                     }
                     entity.memory().put("distance", 10.0);
                 }

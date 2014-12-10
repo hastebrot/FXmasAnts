@@ -1,5 +1,6 @@
 package de.jug_h.entity;
 
+import java.util.List;
 import javafx.geometry.Point2D;
 
 import de.jug_h.util.MathUtils;
@@ -42,23 +43,31 @@ public class Behavior {
         turnTo(angle() + angle);
     }
 
-    public void move() {
+    public void moveWalk() {
         moves = true;
     }
 
-    public void stop() {
+    public void moveStop() {
         moves = false;
     }
+
+    public void transportCarry(Entity entity) {}
+    public void transportDrop() {}
+
+    public void fightAttack(Entity entity) {}
+    public void fightFlee() {}
+
+    public List<Entity> visionLook() { return null; }
+    public void visionMark() {}
 
     public void internalTick() {
         if (moves) {
             Point2D position = position();
             double angle = angle();
 
-            double theta = Math.toRadians(angle - 90);
-            Point2D vector = new Point2D(Math.cos(theta), Math.sin(theta));
+            Point2D direction = MathUtils.rotate(angle - 90);
+            Point2D newPosition = position.add(direction);
 
-            Point2D newPosition = position.add(vector);
             sprite.xProperty().set(MathUtils.clamp(newPosition.getX(), 0, 500 - 25 - 40));
             sprite.yProperty().set(MathUtils.clamp(newPosition.getY(), 0, 500 - 25 - 40));
         }

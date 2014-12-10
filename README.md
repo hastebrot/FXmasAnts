@@ -6,30 +6,46 @@
 ## Example
 
 ~~~java
-private void initAntBehaviour() {
-    Random rng = new Random();
-    defineAntConsumer((Ant ant) -> {
-        if (ant.id == 0) {
-            ant.setAngle(ant.getAngle() + 10);
-            ant.move(10);
+private void initEntityBehavior() {
+    Random random = new Random();
+    defineEntityConsumer((Entity entity) -> {
+        // move in circle.
+        if (entity.id() == 0) {
+            if (entity.memory().getDouble("distance") == 0.0) {
+                entity.memory().put("distance", 10.0);
+                entity.behavior().turnBy(10);
+                entity.behavior().moveWalk();
+            }
+            entity.memory().putDouble("distance", value -> value - 1);
         }
-        if (ant.id == 1) {
-            ant.setAngle(rng.nextDouble() * 360);
-            ant.move(25);
+
+        // move randomly.
+        if (entity.id() == 1) {
+            if (entity.memory().getDouble("distance") == 0.0) {
+                entity.memory().put("distance", 50.0);
+                entity.behavior().turnTo(random.nextDouble() * 360);
+                entity.behavior().moveWalk();
+            }
+            entity.memory().putDouble("distance", value -> value - 1);
         }
-        if (ant.id == 2) {
-            if (ant.data("backwards") == null) {
-                ant.data("backwards", false);
+
+        // move left and right.
+        if (entity.id() == 2) {
+            if (entity.memory().getDouble("angle") == 0.0) {
+                entity.memory().put("angle", 90.0);
             }
-            double value = ant.data("backwards") ? 180 : 0;
-            ant.setAngle(90 + value);
-            ant.move(25);
-            if (ant.getX() > 500) {
-                ant.data("backwards", true);
+            if (entity.memory().getDouble("distance") == 0.0) {
+                entity.behavior().turnTo(entity.memory().getDouble("angle"));
+                entity.behavior().moveWalk();
+                if (entity.behavior().position().getX() >= (500 - 25 - 40)) {
+                    entity.memory().put("angle", -90.0);
+                }
+                if (entity.behavior().position().getX() <= 0) {
+                    entity.memory().put("angle", 90.0);
+                }
+                entity.memory().put("distance", 10.0);
             }
-            if (ant.getX() < 0) {
-                ant.data("backwards", false);
-            }
+            entity.memory().putDouble("distance", value -> value - 1);
         }
     });
 }
