@@ -1,4 +1,4 @@
-package de.jug_h;
+package de.jug_h.util;
 
 public class MathUtils {
 

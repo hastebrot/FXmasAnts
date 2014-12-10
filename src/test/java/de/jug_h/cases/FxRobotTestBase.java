@@ -1,4 +1,4 @@
-package de.jug_h;
+package de.jug_h.cases;
 
 import org.junit.BeforeClass;
 import org.testfx.api.FxRobot;

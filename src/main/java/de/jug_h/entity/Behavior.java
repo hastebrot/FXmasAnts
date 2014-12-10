@@ -2,7 +2,7 @@ package de.jug_h.entity;
 
 import javafx.geometry.Point2D;
 
-import de.jug_h.MathUtils;
+import de.jug_h.util.MathUtils;
 
 public class Behavior {
 

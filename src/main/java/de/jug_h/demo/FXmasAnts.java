@@ -1,9 +1,11 @@
-package de.jug_h;
+package de.jug_h.demo;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import de.jug_h.Playfield;
 
 public class FXmasAnts extends Application {
 
