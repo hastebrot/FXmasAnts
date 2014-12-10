@@ -1,10 +1,11 @@
-package de.jug_h.cases;
+package de.jug_h.cases.acceptance;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 import de.jug_h.Playfield;
+import de.jug_h.cases.FxRobotTestBase;
 import de.jug_h.entity.Behavior;
 import de.jug_h.entity.Entity;
 import de.jug_h.entity.Memory;
