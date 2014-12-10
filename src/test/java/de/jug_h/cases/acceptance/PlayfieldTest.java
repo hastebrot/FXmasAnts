@@ -102,13 +102,13 @@ public class PlayfieldTest extends FxRobotTestBase {
         Entity entity0 = new Entity(0);
         Sprite sprite0 = new Sprite("ant", Resources.antImage());
         entity0.setSprite(sprite0);
-        entity0.setBehavior(new Behavior(entity0.sprite()));
+        entity0.setBehavior(new Behavior(entity0.sprite(), null));
 
         playfield.getEntities().add(entity0);
         waitForFxEvents();
 
         // when:
-        entity0.behavior().turnTo(90);
+        entity0.behavior().turnAt(90);
 
         // then:
         assertThat(sprite0.angleProperty().get(), is(90.0));

@@ -59,7 +59,7 @@ public class Entity {
     }
 
     public void tick() {
-        if (behavior.moves()) {
+        if (behavior.walks()) {
             Point2D position = behavior.position();
             double angle = behavior.angle();
 
@@ -69,6 +69,10 @@ public class Entity {
             sprite.xProperty().set(MathUtils.clamp(newPosition.getX(), 0, 500 - 25 - 40));
             sprite.yProperty().set(MathUtils.clamp(newPosition.getY(), 0, 500 - 25 - 40));
         }
+    }
+
+    public String toString() {
+        return "Entity id=" + id;
     }
 
 }

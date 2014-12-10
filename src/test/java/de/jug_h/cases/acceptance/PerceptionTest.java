@@ -7,10 +7,11 @@ import de.jug_h.Playfield;
 import de.jug_h.cases.FxRobotTestBase;
 import de.jug_h.entity.Entity;
 import de.jug_h.entity.EntityBuilder;
-import de.jug_h.entity.Resources;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.testfx.api.FxToolkit.setupStage;
 
 public class PerceptionTest extends FxRobotTestBase {
@@ -28,6 +29,7 @@ public class PerceptionTest extends FxRobotTestBase {
     @Before
     public void setup() throws Exception {
         playfield = new Playfield();
+        EntityBuilder.register(playfield);
         setupStage((stage) -> {
             Pane pane = playfield.buildPane();
             stage.setScene(new Scene(pane, 500, 500));
@@ -41,20 +43,16 @@ public class PerceptionTest extends FxRobotTestBase {
     //---------------------------------------------------------------------------------------------
 
     @Test
-    public void should_list_entities() {
+    public void should_look() {
         // given:
-        Entity ant = EntityBuilder.build()
-            .id(0).name("ant").image(Resources.antImage()).position(200, 100)
-            .getEntity();
-        Entity bug = EntityBuilder.build()
-            .id(1).name("bug").image(Resources.bugImage()).position(350, 350)
-            .getEntity();
-        Entity fruit = EntityBuilder.build()
-            .id(2).name("fruit").image(Resources.fruitImage()).position(50, 350)
-            .getEntity();
+        Entity ant = EntityBuilder.buildAnt().id(0).position(100, 100).getEntity();
+        Entity bug = EntityBuilder.buildBug().id(1).position(150, 100).getEntity();
+        Entity fruit = EntityBuilder.buildFruit().id(2).position(200, 100).getEntity();
         playfield.getEntities().addAll(ant, bug, fruit);
 
-        sleep(10000);
+        // expect:
+        assertThat(ant.behavior().look(), contains(bug));
+        assertThat(bug.behavior().look(), contains(ant, fruit));
     }
 
 }

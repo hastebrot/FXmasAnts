@@ -3,18 +3,58 @@ package de.jug_h.entity;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
+import de.jug_h.Playfield;
+
 public class EntityBuilder {
+
+    //---------------------------------------------------------------------------------------------
+    // PRIVATE STATIC FIELDS.
+    //---------------------------------------------------------------------------------------------
+
+    private static Playfield playfield;
+
+    //---------------------------------------------------------------------------------------------
+    // STATIC METHODS.
+    //---------------------------------------------------------------------------------------------
+
+    public static void register(Playfield playfield) {
+        EntityBuilder.playfield = playfield;
+    }
+
+    public static EntityBuilder build() {
+        return new EntityBuilder();
+    }
+
+    public static EntityBuilder buildAnt() {
+        return EntityBuilder.build().name("ant").image(Resources.antImage());
+    }
+
+    public static EntityBuilder buildBug() {
+        return EntityBuilder.build().name("bug").image(Resources.bugImage());
+    }
+
+    public static EntityBuilder buildFruit() {
+        return EntityBuilder.build().name("fruit").image(Resources.fruitImage());
+    }
+
+    //---------------------------------------------------------------------------------------------
+    // PRIVATE FIELDS.
+    //---------------------------------------------------------------------------------------------
 
     private int id;
     private String name;
     private Image image;
     private Point2D position;
 
+    //---------------------------------------------------------------------------------------------
+    // CONSTRUCTORS.
+    //---------------------------------------------------------------------------------------------
+
     private EntityBuilder() {}
 
-    public static EntityBuilder build() {
-        return new EntityBuilder();
-    }
+    //---------------------------------------------------------------------------------------------
+    // METHODS.
+    //---------------------------------------------------------------------------------------------
 
     public EntityBuilder id(int id) {
         this.id = id;
@@ -43,7 +83,7 @@ public class EntityBuilder {
         sprite.yProperty().set(position.getY());
         entity.setSprite(sprite);
         entity.setMemory(new Memory());
-        entity.setBehavior(new Behavior(sprite));
+        entity.setBehavior(new Behavior(sprite, playfield.getEntities()));
         return entity;
     }
 

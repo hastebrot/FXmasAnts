@@ -30,6 +30,11 @@ public class Memory {
         return memory.getOrDefault(thing, null);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getObject(String thing) {
+        return (T) memory.getOrDefault(thing, null);
+    }
+
     public double getDouble(String thing) {
         return (double) memory.getOrDefault(thing, 0.0);
     }
@@ -39,7 +44,7 @@ public class Memory {
     }
 
     public boolean has(String thing) {
-        return memory.containsKey(thing);
+        return memory.get(thing) != null;
     }
 
     public void remove(String thing) {

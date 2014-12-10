@@ -83,8 +83,10 @@ public class Playfield {
         Platform.runLater(() -> {
             playfieldPane.getChildren().clear();
             for (Entity entity : entities) {
-                ImageView imageView = entity.sprite().getImageView();
-                playfieldPane.getChildren().add(imageView);
+                if (entity.sprite() != null) {
+                    ImageView imageView = entity.sprite().getImageView();
+                    playfieldPane.getChildren().add(imageView);
+                }
             }
         });
     }
