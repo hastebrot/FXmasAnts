@@ -22,7 +22,7 @@ public class FXmasAnts extends Application {
     public void start(Stage primaryStage) {
         Playfield playfield = new Playfield();
         Pane playfieldPane = playfield.buildPane();
-        playfield.buildSprites();
+        playfield.buildEntities();
         playfield.run();
 
         Scene scene = new Scene(playfieldPane, 500, 500);

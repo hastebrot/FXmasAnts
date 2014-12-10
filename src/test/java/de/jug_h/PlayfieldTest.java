@@ -88,11 +88,11 @@ public class PlayfieldTest extends FxRobotTestBase {
         entity0.setMemory(new Memory());
 
         // when:
-        entity0.getMemory().learn("home", new Point2D(0, 0));
-        entity0.getMemory().learn("home", new Point2D(50, 50));
+        entity0.memory().learn("home", new Point2D(0, 0));
+        entity0.memory().learn("home", new Point2D(50, 50));
 
         // then:
-        assertThat(entity0.getMemory().recall("home"), is(new Point2D(50, 50)));
+        assertThat(entity0.memory().recall("home"), is(new Point2D(50, 50)));
     }
 
     @Test
@@ -101,14 +101,14 @@ public class PlayfieldTest extends FxRobotTestBase {
         Entity entity0 = new Entity(0);
         Sprite sprite0 = new Sprite("ant", Resources.antImage());
         entity0.setSprite(sprite0);
-        entity0.setBehavior(new Behavior(entity0.getSprite()));
+        entity0.setBehavior(new Behavior(entity0.sprite()));
 
         playfield.getEntities().add(entity0);
         playfield.refresh();
         waitForFxEvents();
 
         // when:
-        entity0.getBehavior().turnTo(90);
+        entity0.behavior().turnTo(90);
 
         // then:
         assertThat(sprite0.angleProperty().get(), is(90.0));

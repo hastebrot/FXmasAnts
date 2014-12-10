@@ -15,13 +15,27 @@ public class Memory {
     // METHODS.
     //---------------------------------------------------------------------------------------------
 
-    public <T> void learn(String thing, T value) {
+    public void learn(String thing, Object value) {
         memory.put(thing, value);
     }
 
     @SuppressWarnings("unchecked")
     public <T> T recall(String thing) {
         return (T) memory.get(thing);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T recall(String thing,
+                        T defaultValue) {
+        if (canRecall(thing) && defaultValue != null) {
+            Object value = memory.get(thing);
+            return (T) defaultValue.getClass().cast(value);
+        }
+        return defaultValue;
+    }
+
+    public boolean canRecall(String thing) {
+        return memory.containsKey(thing);
     }
 
     public void forget(String thing) {

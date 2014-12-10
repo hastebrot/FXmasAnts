@@ -26,28 +26,28 @@ public class Entity {
     // GETTER AND SETTER.
     //---------------------------------------------------------------------------------------------
 
-    public int getId() {
+    public int id() {
         return id;
     }
 
-    public Sprite getSprite() {
+    public Sprite sprite() {
         return sprite;
+    }
+
+    public Memory memory() {
+        return memory;
+    }
+
+    public Behavior behavior() {
+        return behavior;
     }
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
 
-    public Memory getMemory() {
-        return memory;
-    }
-
     public void setMemory(Memory memory) {
         this.memory = memory;
-    }
-
-    public Behavior getBehavior() {
-        return behavior;
     }
 
     public void setBehavior(Behavior behavior) {

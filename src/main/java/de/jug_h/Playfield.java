@@ -10,15 +10,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
+import de.jug_h.entity.Behavior;
 import de.jug_h.entity.Entity;
+import de.jug_h.entity.Memory;
 import de.jug_h.entity.Resources;
+import de.jug_h.entity.Sprite;
 
 public class Playfield {
 
@@ -30,9 +32,7 @@ public class Playfield {
     private AnchorPane playfieldPane;
 
     private List<Entity> entities = new ArrayList<>();
-
-    private List<Ant> antList = new ArrayList<>();
-    private Consumer<Ant> antConsumer;
+    private Consumer<Entity> entityConsumer;
 
     //---------------------------------------------------------------------------------------------
     // METHODS.
@@ -44,9 +44,10 @@ public class Playfield {
         return rootPane;
     }
 
-    public void buildSprites() {
-        initAnts();
-        initAntBehaviour();
+    public void buildEntities() {
+        initEntities();
+        initEntityBehavior();
+        refresh();
     }
 
     public List<Entity> getEntities() {
@@ -57,7 +58,7 @@ public class Playfield {
         Platform.runLater(() -> {
             playfieldPane.getChildren().clear();
             for (Entity entity : entities) {
-                ImageView imageView = entity.getSprite().getImageView();
+                ImageView imageView = entity.sprite().getImageView();
                 playfieldPane.getChildren().add(imageView);
             }
         });
@@ -65,7 +66,7 @@ public class Playfield {
 
     public void run() {
         Timeline timeline = initTimeline(Duration.millis(5), (event) -> {
-            callAntConsumer();
+            updateEntities();
         });
         timeline.play();
     }
@@ -73,8 +74,6 @@ public class Playfield {
     //---------------------------------------------------------------------------------------------
     // PRIVATE METHODS.
     //---------------------------------------------------------------------------------------------
-
-    // https://color.adobe.com/Theme-1-color-theme-4814237/
 
     private void initRootPane() {
         rootPane = new StackPane();
@@ -90,50 +89,72 @@ public class Playfield {
         rootPane.getChildren().add(playfieldPane);
     }
 
-    private void initAnts() {
+    private void initEntities() {
         for (int index = 0; index <= 4; index++) {
-            Ant ant = new Ant(index);
-            ant.xProperty.set(150);
-            ant.yProperty.set(150);
-            antList.add(ant);
-        }
-
-        Image antImage = Resources.antImage();
-        for (Ant ant : antList) {
-            ImageView imageView = new ImageView(antImage);
-            imageView.rotateProperty().bind(ant.angleProperty);
-            imageView.xProperty().bind(ant.xProperty);
-            imageView.yProperty().bind(ant.yProperty);
-            playfieldPane.getChildren().add(imageView);
+            Entity entity = new Entity(index);
+            Sprite sprite = new Sprite("ant", Resources.antImage());
+            sprite.xProperty().set(150);
+            sprite.yProperty().set(150);
+            entity.setSprite(sprite);
+            entity.setMemory(new Memory());
+            entity.setBehavior(new Behavior(sprite));
+            entities.add(entity);
         }
     }
 
-    private void initAntBehaviour() {
-        Random rng = new Random();
-        defineAntConsumer((Ant ant) -> {
-            if (ant.id == 0) {
-                ant.setAngle(ant.getAngle() + 10);
-                ant.move(10);
+    private void initEntityBehavior() {
+        Random random = new Random();
+        defineEntityConsumer((Entity entity) -> {
+            // move in circle.
+            if (entity.id() == 0) {
+                if (entity.memory().recall("distance", 0.0) == 0.0) {
+                    entity.memory().learn("distance", 10.0);
+                    entity.behavior().turnTo(entity.behavior().angle() + 10);
+                    entity.behavior().move();
+                }
+                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
             }
-            if (ant.id == 1 || ant.id >= 3) {
-                ant.setAngle(rng.nextDouble() * 360);
-                ant.move(50);
+
+            // move randomly.
+            if (entity.id() == 1) {
+                if (entity.memory().recall("distance", 0.0) == 0.0) {
+                    entity.memory().learn("distance", 50.0);
+                    entity.behavior().turnTo(random.nextDouble() * 360);
+                    entity.behavior().move();
+                }
+                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
             }
-            if (ant.id == 2) {
-                if (ant.memory("backwards") == null) {
-                    ant.memory("backwards", false);
+
+            // move back and forth.
+            if (entity.id() == 2) {
+                if (entity.memory().recall("distance", 0.0) == 0.0) {
+                    double value = entity.memory().recall("backwards", false) ? 180 : 0;
+                    entity.behavior().turnTo(90 + value);
+                    entity.behavior().move();
+                    if (entity.sprite().xProperty().get() >= (500 - 25 - 40)) {
+                        entity.memory().learn("backwards", true);
+                    }
+                    if (entity.sprite().xProperty().get() <= 0) {
+                        entity.memory().learn("backwards", false);
+                    }
+                    entity.memory().learn("distance", 10.0);
                 }
-                double value = ant.memory("backwards") ? 180 : 0;
-                ant.setAngle(90 + value);
-                ant.move(10);
-                if (ant.getX() >= (500 - 25 - 40)) {
-                    ant.memory("backwards", true);
-                }
-                if (ant.getX() <= 0) {
-                    ant.memory("backwards", false);
-                }
+                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
             }
         });
+    }
+
+    private void defineEntityConsumer(Consumer<Entity> entityConsumer) {
+        this.entityConsumer = entityConsumer;
+    }
+
+    private void updateEntities() {
+        if (entityConsumer != null) {
+            for (Entity entity : entities) {
+                entityConsumer.accept(entity);
+                entity.behavior().internalTick();
+            }
+        }
     }
 
     private Timeline initTimeline(Duration duration,
@@ -142,21 +163,6 @@ public class Playfield {
         Timeline timeline = new Timeline(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         return timeline;
-    }
-
-    private void callAntConsumer() {
-        for (Ant ant : antList) {
-            if (ant.distanceProperty.get() == 0) {
-                this.antConsumer.accept(ant);
-            }
-            if (ant.distanceProperty.get() > 0) {
-                ant.tick();
-            }
-        }
-    }
-
-    private void defineAntConsumer(Consumer<Ant> antConsumer) {
-        this.antConsumer = antConsumer;
     }
 
 }
