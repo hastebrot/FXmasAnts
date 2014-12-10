@@ -93,13 +93,29 @@ public class Playfield {
         for (int index = 0; index <= 4; index++) {
             Entity entity = new Entity(index);
             Sprite sprite = new Sprite("ant", Resources.antImage());
-            sprite.xProperty().set(150);
-            sprite.yProperty().set(150);
+            sprite.xProperty().set(200);
+            sprite.yProperty().set(100);
             entity.setSprite(sprite);
             entity.setMemory(new Memory());
             entity.setBehavior(new Behavior(sprite));
             entities.add(entity);
         }
+
+        Entity bugEntity = new Entity(10);
+        Sprite bugSprite = new Sprite("bug", Resources.bugImage());
+        bugSprite.xProperty().set(350);
+        bugSprite.yProperty().set(350);
+        bugEntity.setSprite(bugSprite);
+        bugEntity.setBehavior(new Behavior(bugSprite));
+        entities.add(bugEntity);
+
+        Entity fruitEntity = new Entity(11);
+        Sprite fruitSprite = new Sprite("fruit", Resources.fruitImage());
+        fruitSprite.xProperty().set(50);
+        fruitSprite.yProperty().set(350);
+        fruitEntity.setSprite(fruitSprite);
+        fruitEntity.setBehavior(new Behavior(fruitSprite));
+        entities.add(fruitEntity);
     }
 
     private void initEntityBehavior() {
@@ -107,39 +123,39 @@ public class Playfield {
         defineEntityConsumer((Entity entity) -> {
             // move in circle.
             if (entity.id() == 0) {
-                if (entity.memory().recall("distance", 0.0) == 0.0) {
-                    entity.memory().learn("distance", 10.0);
-                    entity.behavior().turnTo(entity.behavior().angle() + 10);
+                if (entity.memory().getDouble("distance") == 0.0) {
+                    entity.memory().put("distance", 10.0);
+                    entity.behavior().turnBy(10);
                     entity.behavior().move();
                 }
-                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
+                entity.memory().putDouble("distance", value -> value - 1);
             }
 
             // move randomly.
             if (entity.id() == 1) {
-                if (entity.memory().recall("distance", 0.0) == 0.0) {
-                    entity.memory().learn("distance", 50.0);
+                if (entity.memory().getDouble("distance") == 0.0) {
+                    entity.memory().put("distance", 50.0);
                     entity.behavior().turnTo(random.nextDouble() * 360);
                     entity.behavior().move();
                 }
-                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
+                entity.memory().putDouble("distance", value -> value - 1);
             }
 
             // move back and forth.
             if (entity.id() == 2) {
-                if (entity.memory().recall("distance", 0.0) == 0.0) {
-                    double value = entity.memory().recall("backwards", false) ? 180 : 0;
+                if (entity.memory().getDouble("distance") == 0.0) {
+                    double value = entity.memory().getBoolean("backwards") ? 180 : 0;
                     entity.behavior().turnTo(90 + value);
                     entity.behavior().move();
-                    if (entity.sprite().xProperty().get() >= (500 - 25 - 40)) {
-                        entity.memory().learn("backwards", true);
+                    if (entity.behavior().position().getX() >= (500 - 25 - 40)) {
+                        entity.memory().put("backwards", true);
                     }
-                    if (entity.sprite().xProperty().get() <= 0) {
-                        entity.memory().learn("backwards", false);
+                    if (entity.behavior().position().getY() <= 0) {
+                        entity.memory().put("backwards", false);
                     }
-                    entity.memory().learn("distance", 10.0);
+                    entity.memory().put("distance", 10.0);
                 }
-                entity.memory().learn("distance", entity.memory().recall("distance", 0.0) - 1);
+                entity.memory().putDouble("distance", value -> value - 1);
             }
         });
     }

@@ -2,6 +2,7 @@ package de.jug_h.entity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class Memory {
 
@@ -15,35 +16,42 @@ public class Memory {
     // METHODS.
     //---------------------------------------------------------------------------------------------
 
-    public void learn(String thing, Object value) {
+    public void put(String thing,
+                    Object value) {
         memory.put(thing, value);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T recall(String thing) {
-        return (T) memory.get(thing);
+    public void putDouble(String thing,
+                          Function<Double, Double> callback) {
+        put(thing, callback.apply(getDouble(thing)));
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T recall(String thing,
-                        T defaultValue) {
-        if (canRecall(thing) && defaultValue != null) {
-            Object value = memory.get(thing);
-            return (T) defaultValue.getClass().cast(value);
-        }
-        return defaultValue;
+    public Object get(String thing) {
+        return memory.get(thing);
     }
 
-    public boolean canRecall(String thing) {
+    public double getDouble(String thing) {
+        Object value = get(thing);
+        return value == null ? 0.0 : (double) value;
+    }
+
+    public boolean getBoolean(String thing) {
+        Object value = get(thing);
+        return value == null ? false : (boolean) value;
+    }
+
+
+    public boolean has(String thing) {
         return memory.containsKey(thing);
     }
 
-    public void forget(String thing) {
+    public void remove(String thing) {
         memory.remove(thing);
     }
 
-    public void forgetAll() {
+    public void clear() {
         memory.clear();
     }
+
 
 }

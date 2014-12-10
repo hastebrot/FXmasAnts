@@ -31,11 +31,15 @@ public class Behavior {
     }
 
     public double angle() {
-        return sprite.angleProperty().get();
+        return sprite.angleProperty().get() % 360.0;
     }
 
     public void turnTo(double angle) {
         sprite.angleProperty().set(angle);
+    }
+
+    public void turnBy(double angle) {
+        turnTo(angle() + angle);
     }
 
     public void move() {

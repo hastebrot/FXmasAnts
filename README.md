@@ -39,7 +39,7 @@ private void initAntBehaviour() {
 
 - Simplify random movement and off-field movement detection.
 - ~~Add `HashMap` for `Ant`s memory.~~
-- Add interface for `Sprite`s.
+- ~~Add interface for `Sprite`s.~~
 - Implement enemy `Bug`s and energy bar.
 - Implement target `Apple`s, transportation weight and target zone.
 - Add behaviour presets and ant role assignment.

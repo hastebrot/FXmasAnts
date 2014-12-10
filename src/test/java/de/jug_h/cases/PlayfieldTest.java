@@ -37,7 +37,7 @@ public class PlayfieldTest extends FxRobotTestBase {
     @Before
     public void setup() throws Exception {
         playfield = new Playfield();
-        FxToolkit.setupStage((stage) -> {
+        setupStage((stage) -> {
             Pane pane = playfield.buildPane();
             stage.setScene(new Scene(pane, 500, 500));
             stage.setOnShown((windowEvent) -> playfield.run());
@@ -52,7 +52,7 @@ public class PlayfieldTest extends FxRobotTestBase {
     @Test
     public void should_show_window() {
         // expect:
-        Assertions.verifyThat("#playfield", (node) -> node != null);
+        verifyThat("#playfield", (node) -> node != null);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class PlayfieldTest extends FxRobotTestBase {
         playfield.getEntities().add(entity0);
 
         // then:
-        MatcherAssert.assertThat(playfield.getEntities(), Matchers.contains(entity0));
+        assertThat(playfield.getEntities(), contains(entity0));
     }
 
     @Test
@@ -75,11 +75,11 @@ public class PlayfieldTest extends FxRobotTestBase {
         // when:
         playfield.getEntities().add(entity0);
         playfield.refresh();
-        WaitForAsyncUtils.waitForFxEvents();
+        waitForFxEvents();
 
         // then:
         NodeFinder nodeFinder = FxService.serviceContext().getNodeFinder();
-        MatcherAssert.assertThat(nodeFinder.nodes(".ant"), Matchers.contains(sprite0.getImageView()));
+        assertThat(nodeFinder.nodes(".ant"), contains(sprite0.getImageView()));
     }
 
     @Test
@@ -89,11 +89,11 @@ public class PlayfieldTest extends FxRobotTestBase {
         entity0.setMemory(new Memory());
 
         // when:
-        entity0.memory().learn("home", new Point2D(0, 0));
-        entity0.memory().learn("home", new Point2D(50, 50));
+        entity0.memory().put("home", new Point2D(0, 0));
+        entity0.memory().put("home", new Point2D(50, 50));
 
         // then:
-        MatcherAssert.assertThat(entity0.memory().recall("home"), CoreMatchers.is(new Point2D(50, 50)));
+        assertThat(entity0.memory().get("home"), is(new Point2D(50, 50)));
     }
 
     @Test
@@ -106,13 +106,13 @@ public class PlayfieldTest extends FxRobotTestBase {
 
         playfield.getEntities().add(entity0);
         playfield.refresh();
-        WaitForAsyncUtils.waitForFxEvents();
+        waitForFxEvents();
 
         // when:
         entity0.behavior().turnTo(90);
 
         // then:
-        MatcherAssert.assertThat(sprite0.angleProperty().get(), CoreMatchers.is(90.0));
+        assertThat(sprite0.angleProperty().get(), is(90.0));
     }
 
 }
