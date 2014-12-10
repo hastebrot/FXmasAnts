@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -50,6 +51,16 @@ public class Playfield {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public void refresh() {
+        Platform.runLater(() -> {
+            playfieldPane.getChildren().clear();
+            for (Entity entity : entities) {
+                ImageView imageView = entity.getSprite().getImageView();
+                playfieldPane.getChildren().add(imageView);
+            }
+        });
     }
 
     public void run() {

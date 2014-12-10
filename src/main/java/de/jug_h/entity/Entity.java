@@ -10,6 +10,8 @@ public class Entity {
 
     private Sprite sprite;
 
+    private Memory memory;
+
     //---------------------------------------------------------------------------------------------
     // CONSTRUCTORS.
     //---------------------------------------------------------------------------------------------
@@ -32,6 +34,14 @@ public class Entity {
 
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
+    }
+
+    public Memory getMemory() {
+        return memory;
+    }
+
+    public void setMemory(Memory memory) {
+        this.memory = memory;
     }
 
 }
