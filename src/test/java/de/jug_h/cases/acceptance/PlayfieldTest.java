@@ -75,7 +75,6 @@ public class PlayfieldTest extends FxRobotTestBase {
 
         // when:
         playfield.getEntities().add(entity0);
-        playfield.refresh();
         waitForFxEvents();
 
         // then:
@@ -106,7 +105,6 @@ public class PlayfieldTest extends FxRobotTestBase {
         entity0.setBehavior(new Behavior(entity0.sprite()));
 
         playfield.getEntities().add(entity0);
-        playfield.refresh();
         waitForFxEvents();
 
         // when:

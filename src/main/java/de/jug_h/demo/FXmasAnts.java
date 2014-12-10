@@ -7,11 +7,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import de.jug_h.Playfield;
-import de.jug_h.entity.Behavior;
 import de.jug_h.entity.Entity;
-import de.jug_h.entity.Memory;
+import de.jug_h.entity.EntityBuilder;
 import de.jug_h.entity.Resources;
-import de.jug_h.entity.Sprite;
 
 public class FXmasAnts extends Application {
 
@@ -40,7 +38,6 @@ public class FXmasAnts extends Application {
 
         initEntities();
         initEntityBehavior();
-        playfield.refresh();
 
         Scene scene = new Scene(playfieldPane, 500, 500);
         primaryStage.setScene(scene);
@@ -53,32 +50,25 @@ public class FXmasAnts extends Application {
     //---------------------------------------------------------------------------------------------
 
     private void initEntities() {
-        for (int index = 0; index <= 4; index++) {
-            Entity entity = new Entity(index);
-            Sprite sprite = new Sprite("ant", Resources.antImage());
-            sprite.xProperty().set(200);
-            sprite.yProperty().set(100);
-            entity.setSprite(sprite);
-            entity.setMemory(new Memory());
-            entity.setBehavior(new Behavior(sprite));
-            playfield.getEntities().add(entity);
+        //Entity nest = EntityBuilder.build()
+        //    .id(0).name("nest").image(null).position(200, 100)
+        //    .getEntity();
+
+        for (int index = 1; index <= 5; index += 1) {
+            Entity ant = EntityBuilder.build()
+                .id(index).name("ant").image(Resources.antImage()).position(200, 100)
+                .getEntity();
+            playfield.getEntities().add(ant);
         }
 
-        Entity bugEntity = new Entity(10);
-        Sprite bugSprite = new Sprite("bug", Resources.bugImage());
-        bugSprite.xProperty().set(350);
-        bugSprite.yProperty().set(350);
-        bugEntity.setSprite(bugSprite);
-        bugEntity.setBehavior(new Behavior(bugSprite));
-        playfield.getEntities().add(bugEntity);
+        Entity bug = EntityBuilder.build()
+            .id(10).name("bug").image(Resources.bugImage()).position(350, 350)
+            .getEntity();
 
-        Entity fruitEntity = new Entity(11);
-        Sprite fruitSprite = new Sprite("fruit", Resources.fruitImage());
-        fruitSprite.xProperty().set(50);
-        fruitSprite.yProperty().set(350);
-        fruitEntity.setSprite(fruitSprite);
-        fruitEntity.setBehavior(new Behavior(fruitSprite));
-        playfield.getEntities().add(fruitEntity);
+        Entity fruit = EntityBuilder.build()
+            .id(11).name("fruit").image(Resources.fruitImage()).position(50, 350)
+            .getEntity();
+        playfield.getEntities().addAll(bug, fruit);
     }
 
     private void initEntityBehavior() {

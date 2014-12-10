@@ -1,11 +1,12 @@
 package de.jug_h;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -27,7 +28,7 @@ public class Playfield {
     private StackPane rootPane;
     private AnchorPane playfieldPane;
 
-    private List<Entity> entities = new ArrayList<>();
+    private ObservableList<Entity> entities = FXCollections.observableArrayList();
     private Consumer<Entity> entityConsumer;
 
     //---------------------------------------------------------------------------------------------
@@ -37,10 +38,11 @@ public class Playfield {
     public Pane buildPane() {
         initRootPane();
         initPlayfieldPane();
+        entities.addListener((Observable observable) -> refreshEntities());
         return rootPane;
     }
 
-    public List<Entity> getEntities() {
+    public ObservableList<Entity> getEntities() {
         return entities;
     }
 
@@ -50,16 +52,6 @@ public class Playfield {
 
     public void define(Consumer<Entity> entityConsumer) {
         this.entityConsumer = entityConsumer;
-    }
-
-    public void refresh() {
-        Platform.runLater(() -> {
-            playfieldPane.getChildren().clear();
-            for (Entity entity : entities) {
-                ImageView imageView = entity.sprite().getImageView();
-                playfieldPane.getChildren().add(imageView);
-            }
-        });
     }
 
     public void run() {
@@ -85,6 +77,16 @@ public class Playfield {
         playfieldPane.setStyle("-fx-background-color: white;");
 
         rootPane.getChildren().add(playfieldPane);
+    }
+
+    private void refreshEntities() {
+        Platform.runLater(() -> {
+            playfieldPane.getChildren().clear();
+            for (Entity entity : entities) {
+                ImageView imageView = entity.sprite().getImageView();
+                playfieldPane.getChildren().add(imageView);
+            }
+        });
     }
 
     private void updateEntities() {

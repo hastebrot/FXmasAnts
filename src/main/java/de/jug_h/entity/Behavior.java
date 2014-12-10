@@ -13,6 +13,10 @@ public class Behavior {
 
     private boolean moves = false;
 
+    private double visionRange = 0.0;
+
+    private double actionRange = 0.0;
+
     //---------------------------------------------------------------------------------------------
     // CONSTRUCTORS.
     //---------------------------------------------------------------------------------------------
